@@ -7,19 +7,14 @@ import jakarta.persistence.*;
 @DiscriminatorValue("SPECIALIST")
 public class Specialist extends User {
 
-    @Column
-    private String licenseNumber;
-
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(nullable = true)
     private Specialty specialty;
 
-    @Column
+    @Column(nullable = true)
     private Double consultationRate;
 
     // Getters and Setters
-    public String getLicenseNumber() { return licenseNumber; }
-    public void setLicenseNumber(String licenseNumber) { this.licenseNumber = licenseNumber; }
 
     public Specialty getSpecialty() { return specialty; }
     public void setSpecialty(Specialty specialty) { this.specialty = specialty; }

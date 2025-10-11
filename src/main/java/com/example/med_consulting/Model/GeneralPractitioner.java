@@ -6,10 +6,5 @@ import jakarta.persistence.*;
 @DiscriminatorValue("GENERAL_PRACTITIONER")
 public class GeneralPractitioner extends User {
 
-    @Column
-    private String licenseNumber;
 
-    // Getters and Setters
-    public String getLicenseNumber() { return licenseNumber; }
-    public void setLicenseNumber(String licenseNumber) { this.licenseNumber = licenseNumber; }
 }
