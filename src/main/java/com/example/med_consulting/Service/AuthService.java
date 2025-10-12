@@ -5,6 +5,8 @@ import com.example.med_consulting.Model.GeneralPractitioner;
 import com.example.med_consulting.Model.Nurse;
 import com.example.med_consulting.Model.Specialist;
 import com.example.med_consulting.Model.User;
+import com.example.med_consulting.Repository.UserRepository;
+import com.example.med_consulting.Util.PasswordUtil;
 
 public class AuthService {
 
@@ -33,6 +35,15 @@ public class AuthService {
 
         UserDAO userDAO = new UserDAO();
         return userDAO.insertUser(userToInsert);
+    }
+
+    public User loginUser(String email, String password) {
+        UserRepository userRepository = new UserRepository();
+        User searchedForUser = userRepository.getUserByEmail(email);
+        if (searchedForUser != null && PasswordUtil.verifyPassword(password, searchedForUser.getPassword())) {
+            return searchedForUser;
+        }
+        return null;
     }
 
     private void copyProperties(User source, User target) {

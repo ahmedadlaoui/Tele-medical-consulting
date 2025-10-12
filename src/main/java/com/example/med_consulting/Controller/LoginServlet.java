@@ -1,10 +1,14 @@
 package com.example.med_consulting.Controller;
 
+import com.example.med_consulting.Model.User;
+import com.example.med_consulting.Service.AuthService;
+import com.example.med_consulting.Util.RoleRedirect;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
@@ -14,13 +18,31 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
         request.getRequestDispatcher("/Login.jsp").forward(request, response);
     }
 
-    // @Override
-    // protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    //         throws ServletException, IOException {
-    //     response.getWriter().println("Login form submitted!");
-    // }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+
+        AuthService authService = new AuthService();
+        User user = authService.loginUser(email, password);
+
+        if (user != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("userId", user.getId());
+            session.setAttribute("userEmail", user.getEmail());
+            session.setAttribute("userRole", user.getRole());
+            session.setAttribute("userName", user.getFirstName() + " " + user.getLastName());
+
+            String redirectUrl = RoleRedirect.getRedirectUrl(user.getRole());
+            response.sendRedirect(request.getContextPath() + redirectUrl);
+        } else {
+            HttpSession session = request.getSession();
+            session.setAttribute("flashMessage", "Invalid email or password");
+            response.sendRedirect(request.getContextPath() + "/login");
+        }
+    }
 }

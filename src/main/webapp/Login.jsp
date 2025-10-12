@@ -57,6 +57,35 @@
         font-size: 0.75rem;
         color: #DE6143;
       }
+
+      .loading-container {
+        display: none;
+        text-align: center;
+      }
+
+      .loading-container.active {
+        display: block;
+      }
+
+      .spinner {
+        border: 4px solid #f3f4f6;
+        border-top: 4px solid #DE6143;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1.5rem;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
     </style>
   </head>
 
@@ -96,8 +125,13 @@
           </div>
 
           <!-- Login Title -->
-          <div class="text-center mb-8">
+          <div class="text-center mb-8" id="loginTitle">
             <h2 class="text-xl font-normal text-gray-700" style="font-family: 'Poppins', sans-serif;">Sign in</h2>
+          </div>
+
+          <!-- Loading Title (Hidden by default) -->
+          <div class="text-center mb-8 loading-container" id="loadingTitle">
+            <h2 class="text-xl font-normal text-gray-700" style="font-family: 'Poppins', sans-serif;">Welcome</h2>
           </div>
 
           <% String flashMessage=(String) session.getAttribute("flashMessage"); if (flashMessage !=null) {
@@ -110,15 +144,23 @@
                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                     clip-rule="evenodd" />
                 </svg>
-                <span>  
+                <span>
                   <%= flashMessage %>
                 </span>
               </div>
             </div>
             <% } %>
 
+              <!-- Loading Container -->
+              <div class="loading-container" id="loadingContainer">
+                <div class="spinner"></div>
+                <p class="text-sm text-gray-700 font-medium">Signing you in</p>
+                <p class="text-xs text-gray-500 mt-2">Please wait...</p>
+              </div>
+
               <!-- Login Form -->
-              <form action="${pageContext.request.contextPath}/login" method="post">
+              <form action="${pageContext.request.contextPath}/login" method="post" id="loginForm"
+                onsubmit="showLoading(event)">
 
                 <!-- Email Field with Floating Label -->
                 <div class="floating-label-container">
@@ -171,7 +213,7 @@
               </form>
 
               <!-- Sign Up Link -->
-              <div class="mt-4 text-center">
+              <div class="mt-4 text-center" id="signUpLink">
                 <p class="text-sm text-gray-600">
                   Don't have an account?
                   <a href="${pageContext.request.contextPath}/signup" class="font-medium" style="color: #DE6143;">Sign
@@ -198,6 +240,23 @@
           eyeIcon.classList.remove('hidden');
           eyeSlashIcon.classList.add('hidden');
         }
+      }
+
+      function showLoading(event) {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        if (!email || !password) {
+          return true;
+        }
+
+        document.getElementById('loginTitle').style.display = 'none';
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('signUpLink').style.display = 'none';
+        document.getElementById('loadingTitle').classList.add('active');
+        document.getElementById('loadingContainer').classList.add('active');
+
+        return true;
       }
     </script>
   </body>
