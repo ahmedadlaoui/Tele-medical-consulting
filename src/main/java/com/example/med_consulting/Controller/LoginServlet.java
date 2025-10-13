@@ -27,19 +27,26 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
+        System.out.println("Login attempt for email: " + email);
+
         AuthService authService = new AuthService();
         User user = authService.loginUser(email, password);
 
         if (user != null) {
+            System.out.println("Login successful for: " + user.getEmail() + " with role: " + user.getRole());
+
             HttpSession session = request.getSession();
             session.setAttribute("userId", user.getId());
             session.setAttribute("userEmail", user.getEmail());
             session.setAttribute("userRole", user.getRole());
             session.setAttribute("userName", user.getFirstName() + " " + user.getLastName());
 
-            String redirectUrl = RoleRedirect.getRedirectUrl(user.getRole());
-            response.sendRedirect(request.getContextPath() + redirectUrl);
+            System.out.println("Redirecting to: /dashboard");
+
+            response.sendRedirect(request.getContextPath() + "/dashboard");
         } else {
+            System.out.println("Login failed for email: " + email);
+
             HttpSession session = request.getSession();
             session.setAttribute("flashMessage", "Invalid email or password");
             response.sendRedirect(request.getContextPath() + "/login");

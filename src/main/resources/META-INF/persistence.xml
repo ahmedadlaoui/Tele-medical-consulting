@@ -25,7 +25,6 @@
             <!-- Database connection -->
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
 
-            <!-- ✅ FIXED: Changed ; to &amp; -->
             <property name="jakarta.persistence.jdbc.url"
                       value="jdbc:mysql://localhost:3306/med_consulting?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true"/>
 
@@ -34,7 +33,7 @@
 
             <!-- Hibernate options -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+<!--            <property name="hibernate.hbm2ddl.auto" value="update"/>-->
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
         </properties>

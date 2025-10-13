@@ -6,9 +6,9 @@ public class RoleRedirect {
 
     public static String getRedirectUrl(UserRole role) {
         return switch (role) {
-            case GENERAL_PRACTITIONER -> "/dashboard/gp";
-            case SPECIALIST -> "/dashboard/specialist";
-            case NURSE -> "/dashboard/nurse";
+            case GENERAL_PRACTITIONER -> "/gp/dashboard.jsp";
+            case SPECIALIST -> "/specialist/dashboard.jsp";
+            case NURSE -> "/nurse/dashboard.jsp";
         };
     }
 }
