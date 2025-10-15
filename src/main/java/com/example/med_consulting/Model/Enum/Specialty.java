@@ -2,10 +2,13 @@ package com.example.med_consulting.Model.Enum;
 
 public enum Specialty {
     CARDIOLOGY,
-    PULMONOLOGY,
-    DERMATOLOGY,
     NEUROLOGY,
-    ENDOCRINOLOGY,
-    OPHTHALMOLOGY
-
+    ORTHOPEDICS,
+    DERMATOLOGY,
+    PEDIATRICS,
+    ONCOLOGY,
+    PSYCHIATRY,
+    RADIOLOGY,
+    SURGERY,
+    OTHER
 }

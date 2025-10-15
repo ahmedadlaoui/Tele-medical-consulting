@@ -1,5 +1,6 @@
 package com.example.med_consulting.Model;
 
+import com.example.med_consulting.Model.Enum.PriorityLevel;
 import com.example.med_consulting.Model.Enum.QueueStatus;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -12,33 +13,116 @@ public class WaitingQueue {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private PriorityLevel priority;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private QueueStatus status;
+
+    @Column(name = "arrival_time", nullable = false)
+    private LocalDateTime arrivalTime;
+
+    @Column(name = "estimated_wait_time")
+    private Integer estimatedWaitTime;
+
+    @Column(columnDefinition = "TEXT")
+    private String notes;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
-    @Column(nullable = false)
-    private LocalDateTime arrivalTime;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assigned_gp_id")
+    private User assignedGP;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private QueueStatus status;
+    @OneToOne(mappedBy = "queueEntry", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Consultation consultation;
+
+    public WaitingQueue() {
+    }
 
     @PrePersist
     protected void onCreate() {
-        arrivalTime = LocalDateTime.now();
-        status = QueueStatus.WAITING;
+        if (arrivalTime == null) {
+            arrivalTime = LocalDateTime.now();
+        }
+        if (status == null) {
+            status = QueueStatus.WAITING;
+        }
     }
 
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Patient getPatient() { return patient; }
-    public void setPatient(Patient patient) { this.patient = patient; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public LocalDateTime getArrivalTime() { return arrivalTime; }
-    public void setArrivalTime(LocalDateTime arrivalTime) { this.arrivalTime = arrivalTime; }
+    public PriorityLevel getPriority() {
+        return priority;
+    }
 
-    public QueueStatus getStatus() { return status; }
-    public void setStatus(QueueStatus status) { this.status = status; }
+    public void setPriority(PriorityLevel priority) {
+        this.priority = priority;
+    }
+
+    public QueueStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(QueueStatus status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(LocalDateTime arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+
+    public Integer getEstimatedWaitTime() {
+        return estimatedWaitTime;
+    }
+
+    public void setEstimatedWaitTime(Integer estimatedWaitTime) {
+        this.estimatedWaitTime = estimatedWaitTime;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public User getAssignedGP() {
+        return assignedGP;
+    }
+
+    public void setAssignedGP(User assignedGP) {
+        this.assignedGP = assignedGP;
+    }
+
+    public Consultation getConsultation() {
+        return consultation;
+    }
+
+    public void setConsultation(Consultation consultation) {
+        this.consultation = consultation;
+    }
 }

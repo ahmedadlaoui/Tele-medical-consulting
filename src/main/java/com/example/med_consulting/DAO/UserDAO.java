@@ -1,11 +1,12 @@
 package com.example.med_consulting.DAO;
 
+import com.example.med_consulting.DAO.Interfaces.UserDAOInterface;
 import com.example.med_consulting.Model.User;
 import com.example.med_consulting.Util.JPAUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
-public class UserDAO {
+public class UserDAO implements UserDAOInterface {
 
     public boolean insertUser(User user) {
         EntityManager em = JPAUtil.getInstance().getEntityManager();

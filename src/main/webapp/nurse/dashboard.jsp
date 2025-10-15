@@ -383,7 +383,6 @@
                 cellCount++;
             }
 
-            // Next month days to fill exactly 42 cells
             let nextMonthDay = 1;
             while (cellCount < totalCells) {
                 cellsHTML.push('<div class="calendar-day other-month text-center flex items-center justify-center text-[11px] cursor-pointer">' + nextMonthDay + '</div>');
