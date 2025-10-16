@@ -102,4 +102,8 @@ public class PatientService {
             return false;
         }
     }
+
+    public Patient getPatientById(Long patientId) {
+        return patientDAO.findById(patientId);
+    }
 }

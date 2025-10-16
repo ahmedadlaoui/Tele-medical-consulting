@@ -228,8 +228,9 @@
                                             <div
                                                 class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3">
                                                 <c:forEach var="patient" items="${patients}">
-                                                    <div class="bg-gray-50 border border-gray-300 p-3 hover:bg-gray-100 hover:shadow-sm transition-all cursor-pointer"
-                                                        style="border-radius: 2px;">
+                                                    <a href="${pageContext.request.contextPath}/nurse/patient-detail?id=${patient.id}"
+                                                        class="bg-gray-50 border border-gray-300 p-3 hover:bg-gray-100 hover:shadow-sm transition-all cursor-pointer block"
+                                                        style="border-radius: 2px; text-decoration: none; color: inherit;">
                                                         <div class="flex gap-3">
                                                             <c:choose>
                                                                 <c:when test="${not empty patient.profilePicture}">
@@ -284,7 +285,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </a>
                                                 </c:forEach>
                                             </div>
                                         </c:otherwise>

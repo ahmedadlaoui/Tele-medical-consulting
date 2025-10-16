@@ -14,16 +14,16 @@ public class VitalSigns {
     @Column(nullable = false)
     private Double temperature;
 
-    @Column(name = "blood_pressure_systolic", nullable = false)
+    @Column(name = "bloodPressureSystolic", nullable = false)
     private Integer bloodPressureSystolic;
 
-    @Column(name = "blood_pressure_diastolic", nullable = false)
+    @Column(name = "bloodPressureDiastolic", nullable = false)
     private Integer bloodPressureDiastolic;
 
-    @Column(name = "pulse_rate", nullable = false)
-    private Integer pulseRate;
+    @Column(name = "heartRate", nullable = false)
+    private Integer heartRate;
 
-    @Column(name = "respiratory_rate")
+    @Column(name = "respiratoryRate")
     private Integer respiratoryRate;
 
     @Column(name = "oxygen_saturation")
@@ -38,7 +38,7 @@ public class VitalSigns {
     @Column(columnDefinition = "TEXT")
     private String notes;
 
-    @Column(name = "recorded_at", nullable = false)
+    @Column(name = "recordedAt", nullable = false)
     private LocalDateTime recordedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -55,6 +55,8 @@ public class VitalSigns {
         }
     }
 
+    // Getters and Setters
+
     public Long getId() {
         return id;
     }
@@ -63,60 +65,12 @@ public class VitalSigns {
         this.id = id;
     }
 
-    public Double getTemperature() {
-        return temperature;
+    public Integer getHeartRate() {
+        return heartRate;
     }
 
-    public void setTemperature(Double temperature) {
-        this.temperature = temperature;
-    }
-
-    public Integer getBloodPressureSystolic() {
-        return bloodPressureSystolic;
-    }
-
-    public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
-        this.bloodPressureSystolic = bloodPressureSystolic;
-    }
-
-    public Integer getBloodPressureDiastolic() {
-        return bloodPressureDiastolic;
-    }
-
-    public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
-        this.bloodPressureDiastolic = bloodPressureDiastolic;
-    }
-
-    public Integer getPulseRate() {
-        return pulseRate;
-    }
-
-    public void setPulseRate(Integer pulseRate) {
-        this.pulseRate = pulseRate;
-    }
-
-    public Integer getRespiratoryRate() {
-        return respiratoryRate;
-    }
-
-    public void setRespiratoryRate(Integer respiratoryRate) {
-        this.respiratoryRate = respiratoryRate;
-    }
-
-    public Integer getOxygenSaturation() {
-        return oxygenSaturation;
-    }
-
-    public void setOxygenSaturation(Integer oxygenSaturation) {
-        this.oxygenSaturation = oxygenSaturation;
-    }
-
-    public Double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Double weight) {
-        this.weight = weight;
+    public void setHeartRate(Integer heartRate) {
+        this.heartRate = heartRate;
     }
 
     public Double getHeight() {
@@ -127,12 +81,69 @@ public class VitalSigns {
         this.height = height;
     }
 
+    public Double getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(Double temperature) {
+        this.temperature = temperature;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public Integer getBloodPressureDiastolic() {
+        return bloodPressureDiastolic;
+    }
+
+    public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+        this.bloodPressureDiastolic = bloodPressureDiastolic;
+    }
+
+    public Integer getBloodPressureSystolic() {
+        return bloodPressureSystolic;
+    }
+
+    public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+        this.bloodPressureSystolic = bloodPressureSystolic;
+    }
+
     public String getNotes() {
         return notes;
     }
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public Integer getOxygenSaturation() {
+        return oxygenSaturation;
+    }
+
+    public void setOxygenSaturation(Integer oxygenSaturation) {
+        this.oxygenSaturation = oxygenSaturation;
+    }
+
+    // Alias methods for backward compatibility - pulseRate is same as heartRate
+    public Integer getPulseRate() {
+        return heartRate;
+    }
+
+    public void setPulseRate(Integer pulseRate) {
+        this.heartRate = pulseRate;
     }
 
     public LocalDateTime getRecordedAt() {
@@ -143,11 +154,11 @@ public class VitalSigns {
         this.recordedAt = recordedAt;
     }
 
-    public Patient getPatient() {
-        return patient;
+    public Integer getRespiratoryRate() {
+        return respiratoryRate;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setRespiratoryRate(Integer respiratoryRate) {
+        this.respiratoryRate = respiratoryRate;
     }
 }

@@ -56,4 +56,28 @@ public class PatientDAO implements PatientDAOInterface {
             }
         }
     }
+
+    public Patient findById(Long patientId) {
+        EntityManager em = null;
+
+        try {
+            em = JPAUtil.getInstance().getEntityManager();
+
+            if (em == null) {
+                System.out.println("ERROR: EntityManager is null");
+                return null;
+            }
+
+            return em.find(Patient.class, patientId);
+
+        } catch (Exception e) {
+            System.out.println("ERROR finding patient by ID " + patientId + ": " + e.getMessage());
+            return null;
+
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+    }
 }
