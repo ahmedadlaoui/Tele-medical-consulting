@@ -80,4 +80,41 @@ public class PatientDAO implements PatientDAOInterface {
             }
         }
     }
+
+    /**
+     * Find patient by ID with vital signs history eagerly loaded
+     * 
+     * @param patientId The patient ID
+     * @return Patient with vital signs loaded
+     */
+    public Patient findByIdWithVitalSigns(Long patientId) {
+        EntityManager em = null;
+
+        try {
+            em = JPAUtil.getInstance().getEntityManager();
+
+            if (em == null) {
+                System.out.println("ERROR: EntityManager is null");
+                return null;
+            }
+
+            // Use JPQL with JOIN FETCH to eagerly load vital signs
+            Patient patient = em.createQuery(
+                    "SELECT p FROM Patient p LEFT JOIN FETCH p.vitalSignsHistory v WHERE p.id = :patientId ORDER BY v.recordedAt DESC",
+                    Patient.class)
+                    .setParameter("patientId", patientId)
+                    .getSingleResult();
+
+            return patient;
+
+        } catch (Exception e) {
+            System.out.println("ERROR finding patient with vital signs by ID " + patientId + ": " + e.getMessage());
+            return null;
+
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+    }
 }

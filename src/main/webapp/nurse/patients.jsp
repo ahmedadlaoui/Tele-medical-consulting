@@ -93,47 +93,33 @@
 
                             <!-- Page Title with Messages -->
                             <div class="mb-4 flex items-center justify-between gap-4">
-                                <div>
-                                    <h1 class="text-2xl font-semibold text-gray-800">Patients Management</h1>
-                                    <p class="text-xs text-gray-600 mt-1">View and manage all registered patients</p>
-                                </div>
-
                                 <!-- Success/Error Messages -->
                                 <div class="flex-shrink-0 max-w-md">
-                                    <c:if test="${param.success == 'registered'}">
-                                        <div class="px-4 py-2.5 bg-green-50 border border-green-200 text-green-800 text-xs flex items-center gap-2"
+                                    <c:if test="${not empty sessionScope.successMessage}">
+                                        <div id="flashMessage"
+                                            class="px-4 py-2.5 bg-green-50 border border-green-200 text-green-800 text-xs flex items-center gap-2"
                                             style="border-radius: 2px;">
                                             <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M5 13l4 4L19 7" />
                                             </svg>
-                                            <span>Patient registered successfully!</span>
+                                            <span>${sessionScope.successMessage}</span>
                                         </div>
+                                        <c:remove var="successMessage" scope="session" />
                                     </c:if>
-                                    <c:if test="${param.error != null}">
-                                        <div class="px-4 py-2.5 bg-red-50 border border-red-200 text-red-800 text-xs flex items-center gap-2"
+                                    <c:if test="${not empty sessionScope.errorMessage}">
+                                        <div id="flashMessage"
+                                            class="px-4 py-2.5 bg-red-50 border border-red-200 text-red-800 text-xs flex items-center gap-2"
                                             style="border-radius: 2px;">
                                             <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M6 18L18 6M6 6l12 12" />
                                             </svg>
-                                            <span>
-                                                <c:choose>
-                                                    <c:when test="${param.error == 'registration_failed'}">Failed to
-                                                        register
-                                                        patient. Please try again.</c:when>
-                                                    <c:when test="${param.error == 'invalid_input'}">Invalid input data.
-                                                        Please
-                                                        check all fields.</c:when>
-                                                    <c:when test="${param.error == 'exception'}">System error occurred.
-                                                        Please
-                                                        contact administrator.</c:when>
-                                                    <c:otherwise>An error occurred. Please try again.</c:otherwise>
-                                                </c:choose>
-                                            </span>
+                                            <span>${sessionScope.errorMessage}</span>
                                         </div>
+                                        <c:remove var="errorMessage" scope="session" />
                                     </c:if>
                                 </div>
                             </div>
@@ -1084,6 +1070,20 @@
 
                     // Log when page loads
                     console.log('Patient registration form initialized with layout protection');
+
+                    // Auto-dismiss flash messages after 5 seconds
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const flashMessage = document.getElementById('flashMessage');
+                        if (flashMessage) {
+                            setTimeout(function () {
+                                flashMessage.style.transition = 'opacity 0.5s ease-out';
+                                flashMessage.style.opacity = '0';
+                                setTimeout(function () {
+                                    flashMessage.remove();
+                                }, 500); // Wait for fade out animation
+                            }, 5000); // Show for 5 seconds
+                        }
+                    });
                 </script>
             </body>
 

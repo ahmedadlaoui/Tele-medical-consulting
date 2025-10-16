@@ -138,16 +138,19 @@ public class PatientsServlet extends HttpServlet {
 
             if (success) {
                 System.out.println("SUCCESS: Patient registered successfully");
-                response.sendRedirect(request.getContextPath() + "/nurse/patients?success=registered");
+                request.getSession().setAttribute("successMessage", "Patient registered successfully!");
+                response.sendRedirect(request.getContextPath() + "/nurse/patients");
             } else {
                 System.out.println("ERROR: Registration failed in service layer");
-                response.sendRedirect(request.getContextPath() + "/nurse/patients?error=registration_failed");
+                request.getSession().setAttribute("errorMessage", "Failed to register patient. Please try again.");
+                response.sendRedirect(request.getContextPath() + "/nurse/patients");
             }
 
         } catch (Exception e) {
             System.out.println("ERROR: Patient registration exception - " + e.getMessage());
             e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/nurse/patients?error=exception");
+            request.getSession().setAttribute("errorMessage", "System error occurred. Please contact administrator.");
+            response.sendRedirect(request.getContextPath() + "/nurse/patients");
         }
     }
 

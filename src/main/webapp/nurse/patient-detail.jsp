@@ -60,14 +60,38 @@
                                     <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                                 </button>
 
-                                <!-- Profile -->
-                                <div class="flex items-center gap-2">
-                                    <img src="${pageContext.request.contextPath}/assets/images/07c4720d19a9e9edad9d0e939eca304a.jpg"
-                                        alt="Profile" class="w-8 h-8 rounded-full object-cover border border-gray-200">
-                                    <span class="text-xs font-medium text-gray-700"
-                                        style="font-family: 'Poppins', sans-serif;">
-                                        <%= session.getAttribute("userName") %>
-                                    </span>
+                                <!-- Profile with Dropdown -->
+                                <div class="relative">
+                                    <button id="profileMenuBtn"
+                                        class="flex items-center gap-2 hover:bg-gray-50 rounded px-2 py-1 transition-all"
+                                        style="border-radius: 2px;">
+                                        <img src="${pageContext.request.contextPath}/assets/images/07c4720d19a9e9edad9d0e939eca304a.jpg"
+                                            alt="Profile"
+                                            class="w-8 h-8 rounded-full object-cover border border-gray-200">
+                                        <span class="text-xs font-medium text-gray-700"
+                                            style="font-family: 'Poppins', sans-serif;">
+                                            <%= session.getAttribute("userName") %>
+                                        </span>
+                                        <svg class="w-3 h-3 text-gray-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </button>
+
+                                    <!-- Dropdown Menu -->
+                                    <div id="profileMenu"
+                                        class="hidden absolute right-0 top-11 w-36 bg-white border border-gray-300 py-1 z-50"
+                                        style="border-radius: 2px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                        <a href="${pageContext.request.contextPath}/logout"
+                                            class="flex items-center gap-2 px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-all">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                            </svg>
+                                            Logout
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -303,53 +327,97 @@
                                             <h2 class="text-sm font-semibold text-gray-800">Vital Signs History</h2>
                                         </div>
                                         <div class="p-6">
-                                            <div class="space-y-3">
-                                                <!-- Sample Vital Signs Entry -->
-                                                <div class="bg-gray-50 p-4 border border-gray-200"
-                                                    style="border-radius: 2px;">
-                                                    <div class="flex justify-between items-start mb-3">
-                                                        <p class="text-xs font-semibold text-gray-700">October 15, 2025
-                                                            - 10:30 AM</p>
+                                            <c:choose>
+                                                <c:when test="${empty patient.vitalSignsHistory}">
+                                                    <!-- Empty State -->
+                                                    <div class="text-center py-6 text-gray-500 text-sm">
+                                                        <svg class="w-12 h-12 mx-auto mb-2 text-gray-300" fill="none"
+                                                            stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                                        </svg>
+                                                        <p>No vital signs recorded yet</p>
                                                     </div>
-                                                    <div class="grid grid-cols-3 gap-4">
-                                                        <div>
-                                                            <p class="text-xs text-gray-500">Temperature</p>
-                                                            <p class="text-sm font-medium text-gray-800">36.5°C</p>
-                                                        </div>
-                                                        <div>
-                                                            <p class="text-xs text-gray-500">Blood Pressure</p>
-                                                            <p class="text-sm font-medium text-gray-800">120/80 mmHg</p>
-                                                        </div>
-                                                        <div>
-                                                            <p class="text-xs text-gray-500">Pulse Rate</p>
-                                                            <p class="text-sm font-medium text-gray-800">72 bpm</p>
-                                                        </div>
-                                                        <div>
-                                                            <p class="text-xs text-gray-500">Respiratory Rate</p>
-                                                            <p class="text-sm font-medium text-gray-800">16 /min</p>
-                                                        </div>
-                                                        <div>
-                                                            <p class="text-xs text-gray-500">O2 Saturation</p>
-                                                            <p class="text-sm font-medium text-gray-800">98%</p>
-                                                        </div>
-                                                        <div>
-                                                            <p class="text-xs text-gray-500">Weight</p>
-                                                            <p class="text-sm font-medium text-gray-800">75 kg</p>
-                                                        </div>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <div class="space-y-3">
+                                                        <!-- Loop through vital signs -->
+                                                        <c:forEach var="vitalSign" items="${patient.vitalSignsHistory}">
+                                                            <div class="bg-gray-50 p-4 border border-gray-200"
+                                                                style="border-radius: 2px;">
+                                                                <div class="flex justify-between items-start mb-3">
+                                                                    <p class="text-xs font-semibold text-gray-700">
+                                                                        ${fn:substring(vitalSign.recordedAt, 0, 10)} at
+                                                                        ${fn:substring(vitalSign.recordedAt, 11, 16)}
+                                                                    </p>
+                                                                </div>
+                                                                <div class="grid grid-cols-3 gap-4">
+                                                                    <div>
+                                                                        <p class="text-xs text-gray-500">Temperature</p>
+                                                                        <p class="text-sm font-medium text-gray-800">
+                                                                            ${vitalSign.temperature}°C</p>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p class="text-xs text-gray-500">Blood Pressure
+                                                                        </p>
+                                                                        <p class="text-sm font-medium text-gray-800">
+                                                                            ${vitalSign.bloodPressureSystolic}/${vitalSign.bloodPressureDiastolic}
+                                                                            mmHg</p>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p class="text-xs text-gray-500">Heart Rate</p>
+                                                                        <p class="text-sm font-medium text-gray-800">
+                                                                            ${vitalSign.heartRate} bpm</p>
+                                                                    </div>
+                                                                    <c:if test="${not empty vitalSign.respiratoryRate}">
+                                                                        <div>
+                                                                            <p class="text-xs text-gray-500">Respiratory
+                                                                                Rate</p>
+                                                                            <p
+                                                                                class="text-sm font-medium text-gray-800">
+                                                                                ${vitalSign.respiratoryRate} /min</p>
+                                                                        </div>
+                                                                    </c:if>
+                                                                    <c:if
+                                                                        test="${not empty vitalSign.oxygenSaturation}">
+                                                                        <div>
+                                                                            <p class="text-xs text-gray-500">O2
+                                                                                Saturation</p>
+                                                                            <p
+                                                                                class="text-sm font-medium text-gray-800">
+                                                                                ${vitalSign.oxygenSaturation}%</p>
+                                                                        </div>
+                                                                    </c:if>
+                                                                    <c:if test="${not empty vitalSign.weight}">
+                                                                        <div>
+                                                                            <p class="text-xs text-gray-500">Weight</p>
+                                                                            <p
+                                                                                class="text-sm font-medium text-gray-800">
+                                                                                ${vitalSign.weight} kg</p>
+                                                                        </div>
+                                                                    </c:if>
+                                                                    <c:if test="${not empty vitalSign.height}">
+                                                                        <div>
+                                                                            <p class="text-xs text-gray-500">Height</p>
+                                                                            <p
+                                                                                class="text-sm font-medium text-gray-800">
+                                                                                ${vitalSign.height} cm</p>
+                                                                        </div>
+                                                                    </c:if>
+                                                                </div>
+                                                                <c:if test="${not empty vitalSign.notes}">
+                                                                    <div class="mt-3 pt-3 border-t border-gray-200">
+                                                                        <p class="text-xs text-gray-500 mb-1">Notes:</p>
+                                                                        <p class="text-sm text-gray-700">
+                                                                            ${vitalSign.notes}</p>
+                                                                    </div>
+                                                                </c:if>
+                                                            </div>
+                                                        </c:forEach>
                                                     </div>
-                                                </div>
-
-                                                <!-- Empty State -->
-                                                <div class="text-center py-6 text-gray-500 text-sm hidden">
-                                                    <svg class="w-12 h-12 mx-auto mb-2 text-gray-300" fill="none"
-                                                        stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                                    </svg>
-                                                    <p>No vital signs recorded yet</p>
-                                                </div>
-                                            </div>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
                                     </div>
                                 </div>
@@ -575,6 +643,29 @@
                         </div>
                     </main>
                 </div>
+
+                <script>
+                    // Profile dropdown functionality
+                    const profileMenuBtn = document.getElementById('profileMenuBtn');
+                    const profileMenu = document.getElementById('profileMenu');
+
+                    if (profileMenuBtn && profileMenu) {
+                        profileMenuBtn.addEventListener('click', function (e) {
+                            e.stopPropagation();
+                            profileMenu.classList.toggle('hidden');
+                        });
+
+                        // Close dropdown when clicking outside
+                        document.addEventListener('click', function () {
+                            profileMenu.classList.add('hidden');
+                        });
+
+                        // Prevent closing when clicking inside the menu
+                        profileMenu.addEventListener('click', function (e) {
+                            e.stopPropagation();
+                        });
+                    }
+                </script>
             </body>
 
             </html>

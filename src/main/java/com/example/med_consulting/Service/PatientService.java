@@ -106,4 +106,14 @@ public class PatientService {
     public Patient getPatientById(Long patientId) {
         return patientDAO.findById(patientId);
     }
+
+    /**
+     * Get patient by ID with vital signs history eagerly loaded
+     * 
+     * @param patientId The patient ID
+     * @return Patient with vital signs loaded
+     */
+    public Patient getPatientWithVitalSigns(Long patientId) {
+        return patientDAO.findByIdWithVitalSigns(patientId);
+    }
 }

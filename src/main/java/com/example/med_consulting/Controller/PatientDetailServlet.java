@@ -37,8 +37,8 @@ public class PatientDetailServlet extends HttpServlet {
         try {
             Long patientId = Long.parseLong(patientIdParam);
 
-            // Fetch patient from database
-            Patient patient = patientService.getPatientById(patientId);
+            // Fetch patient with vital signs from database
+            Patient patient = patientService.getPatientWithVitalSigns(patientId);
 
             if (patient == null) {
                 // Patient not found, redirect back to patients list
