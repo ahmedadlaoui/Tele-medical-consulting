@@ -42,7 +42,23 @@
 
 <body class="min-h-screen flex flex-col">
 <jsp:include page="header.jsp"/>
-
+<% String flashMessage = (String) session.getAttribute("flashMessage");
+    if (flashMessage != null) {
+        session.removeAttribute("flashMessage"); %>
+<div class="mb-4 p-3 rounded-md text-sm"
+     style="background-color: #D1FAE5; border: 1px solid #10B981; color: #065F46; border-radius: 4px;">
+    <div class="flex items-center">
+        <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"/>
+        </svg>
+        <span>
+                  <%= flashMessage %>
+                </span>
+    </div>
+</div>
+<% } %>
 <main class="flex-1 overflow-auto py-6 px-6">
     <div class="max-w-[1400px] mx-auto flex flex-col gap-6 md:flex-row">
         <!-- Left column: Calendar + Form -->
@@ -77,7 +93,8 @@
             <!-- Add Time Slot Form -->
             <div class="border-t border-gray-100 pt-4">
                 <h3 class="text-xs font-semibold text-gray-800 mb-3">Add Time Slot</h3>
-                <form id="timeSlotForm" class="space-y-3" method="POST" action="${pageContext.request.contextPath}/gp/dashboard">
+                <form id="timeSlotForm" class="space-y-3" method="POST"
+                      action="${pageContext.request.contextPath}/gp/dashboard">
                     <div>
                         <label class="block text-[11px] text-gray-600 mb-1">Start Time</label>
                         <input type="datetime-local" name="startTime" id="startTime"
@@ -98,7 +115,7 @@
                         </select>
                     </div>
                     <div class="flex justify-end">
-                        <button type="button" id="addTimeSlotBtn"
+                        <button type="submit" id="addTimeSlotBtn"
                                 class="bg-[#DE6143] text-white text-sm font-medium px-3 py-2 rounded hover:bg-[#c6543b] transition-all">
                             Add Slot
                         </button>
@@ -155,13 +172,14 @@
     function renderGpCalendar() {
         const year = gpCurrentDate.getFullYear();
         const month = gpCurrentDate.getMonth();
-        const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         document.getElementById('calendarMonthYear').textContent = monthNames[month] + ' ' + year;
 
         const firstDay = new Date(year, month, 1).getDay();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const prevMonthDays = new Date(year, month, 0).getDate();
-        const today = new Date(); today.setHours(0,0,0,0);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
         const calendarGrid = document.getElementById('gpCalendarGrid');
         calendarGrid.innerHTML = '';
@@ -169,45 +187,68 @@
         const totalCells = 42;
         const cellsHTML = [];
 
-        for(let i = firstDay-1;i>=0;i--){
-            const day = prevMonthDays-i;
-            cellsHTML.push('<div class="calendar-day other-month text-center flex items-center justify-center text-[11px] cursor-pointer">'+day+'</div>');
+        for (let i = firstDay - 1; i >= 0; i--) {
+            const day = prevMonthDays - i;
+            cellsHTML.push('<div class="calendar-day other-month text-center flex items-center justify-center text-[11px] cursor-pointer">' + day + '</div>');
             cellCount++;
         }
 
-        for(let day=1;day<=daysInMonth;day++){
-            const checkDate = new Date(year,month,day);
-            checkDate.setHours(0,0,0,0);
+        for (let day = 1; day <= daysInMonth; day++) {
+            const checkDate = new Date(year, month, day);
+            checkDate.setHours(0, 0, 0, 0);
             const todayClass = checkDate.getTime() === today.getTime() ? 'today' : '';
-            cellsHTML.push('<div class="calendar-day '+todayClass+' text-center flex items-center justify-center text-[11px] cursor-pointer font-normal">'+day+'</div>');
+            cellsHTML.push('<div class="calendar-day ' + todayClass + ' text-center flex items-center justify-center text-[11px] cursor-pointer font-normal">' + day + '</div>');
             cellCount++;
         }
 
-        let nextMonthDay=1;
-        while(cellCount<totalCells){
-            cellsHTML.push('<div class="calendar-day other-month text-center flex items-center justify-center text-[11px] cursor-pointer">'+nextMonthDay+'</div>');
-            nextMonthDay++; cellCount++;
+        let nextMonthDay = 1;
+        while (cellCount < totalCells) {
+            cellsHTML.push('<div class="calendar-day other-month text-center flex items-center justify-center text-[11px] cursor-pointer">' + nextMonthDay + '</div>');
+            nextMonthDay++;
+            cellCount++;
         }
 
         calendarGrid.innerHTML = cellsHTML.join('');
-        const opt={year:'numeric',month:'short',day:'numeric'};
+        const opt = {year: 'numeric', month: 'short', day: 'numeric'};
     }
 
-    document.getElementById('prevCal').addEventListener('click',()=>{gpCurrentDate.setMonth(gpCurrentDate.getMonth()-1);renderGpCalendar();});
-    document.getElementById('nextCal').addEventListener('click',()=>{gpCurrentDate.setMonth(gpCurrentDate.getMonth()+1);renderGpCalendar();});
-    if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',renderGpCalendar);}else{renderGpCalendar();}
+    document.getElementById('prevCal').addEventListener('click', () => {
+        gpCurrentDate.setMonth(gpCurrentDate.getMonth() - 1);
+        renderGpCalendar();
+    });
+    document.getElementById('nextCal').addEventListener('click', () => {
+        gpCurrentDate.setMonth(gpCurrentDate.getMonth() + 1);
+        renderGpCalendar();
+    });
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', renderGpCalendar);
+    } else {
+        renderGpCalendar();
+    }
 
-    document.getElementById('addTimeSlotBtn').addEventListener('click',function(){
-        const start=document.getElementById('startTime').value;
-        const end=document.getElementById('endTime').value;
-        const status=document.getElementById('slotStatus').value;
-        const doctor=document.getElementById('doctor').value.trim();
-        const msgEl=document.getElementById('timeSlotMsg');
-        if(!start||!end){msgEl.textContent='Start and End time are required.';return;}
-        if(new Date(start)>=new Date(end)){msgEl.textContent='End time must be after start time.';return;}
-        if(!doctor){msgEl.textContent='Doctor is required.';return;}
-        msgEl.textContent='Time slot (local-only) added: '+new Date(start).toLocaleString()+' → '+new Date(end).toLocaleString()+' ('+status+') for '+doctor+'.';
-        document.getElementById('startTime').value=''; document.getElementById('endTime').value=''; document.getElementById('doctor').value=''; document.getElementById('slotStatus').value='AVAILABLE';
+    document.getElementById('addTimeSlotBtn').addEventListener('click', function () {
+        const start = document.getElementById('startTime').value;
+        const end = document.getElementById('endTime').value;
+        const status = document.getElementById('slotStatus').value;
+        const doctor = document.getElementById('doctor').value.trim();
+        const msgEl = document.getElementById('timeSlotMsg');
+        if (!start || !end) {
+            msgEl.textContent = 'Start and End time are required.';
+            return;
+        }
+        if (new Date(start) >= new Date(end)) {
+            msgEl.textContent = 'End time must be after start time.';
+            return;
+        }
+        if (!doctor) {
+            msgEl.textContent = 'Doctor is required.';
+            return;
+        }
+        msgEl.textContent = 'Time slot (local-only) added: ' + new Date(start).toLocaleString() + ' → ' + new Date(end).toLocaleString() + ' (' + status + ') for ' + doctor + '.';
+        document.getElementById('startTime').value = '';
+        document.getElementById('endTime').value = '';
+        document.getElementById('doctor').value = '';
+        document.getElementById('slotStatus').value = 'AVAILABLE';
     });
 </script>
 </body>

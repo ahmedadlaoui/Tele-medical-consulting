@@ -75,4 +75,16 @@ public class TimeSlot {
     public void setDoctor(User doctor) {
         this.doctor = doctor;
     }
+
+    @Override
+    public String toString() {
+        return "TimeSlot{" +
+                "id=" + id +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", status=" + status +
+                ", doctor=" + (doctor != null ? doctor.getId() : "null") +
+                '}';
+    }
+
 }
