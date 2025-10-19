@@ -1,6 +1,7 @@
 package com.example.med_consulting.Model;
 
 import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,5 +57,11 @@ public class GeneralPractitioner extends User {
 
     public void setAvailableTimeSlots(List<TimeSlot> availableTimeSlots) {
         this.availableTimeSlots = availableTimeSlots;
+    }
+
+    public String toString() {
+        return "Dr. " + getFirstName() + " " + getLastName() +
+                " | Email: " + getEmail() +
+                " | License: " + getLicenseNumber();
     }
 }

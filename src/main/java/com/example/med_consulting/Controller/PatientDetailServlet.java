@@ -1,7 +1,9 @@
 package com.example.med_consulting.Controller;
 
 import com.example.med_consulting.Model.Enum.UserRole;
+import com.example.med_consulting.Model.GeneralPractitioner;
 import com.example.med_consulting.Model.Patient;
+import com.example.med_consulting.Service.GpService;
 import com.example.med_consulting.Service.PatientService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/nurse/patient-detail")
 public class PatientDetailServlet extends HttpServlet {
@@ -20,13 +23,9 @@ public class PatientDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        // Check if user is authenticated and is a nurse
         if (!isValidNurseSession(request, response)) {
             return;
         }
-
-        // Get patient ID from request parameter
         String patientIdParam = request.getParameter("id");
 
         if (patientIdParam == null || patientIdParam.trim().isEmpty()) {
@@ -37,8 +36,10 @@ public class PatientDetailServlet extends HttpServlet {
         try {
             Long patientId = Long.parseLong(patientIdParam);
 
-            // Fetch patient with vital signs from database
             Patient patient = patientService.getPatientWithVitalSigns(patientId);
+
+            GpService gpService = new GpService();
+            List<GeneralPractitioner> GeneralPractitioners = gpService.getAllGeneralPractitioners();
 
             if (patient == null) {
                 // Patient not found, redirect back to patients list
@@ -46,7 +47,9 @@ public class PatientDetailServlet extends HttpServlet {
                 return;
             }
 
-            // Set patient as request attribute
+            // Set variables as request attributes
+
+            request.setAttribute("generalPractitioners", GeneralPractitioners);
             request.setAttribute("patient", patient);
 
             // Forward to JSP

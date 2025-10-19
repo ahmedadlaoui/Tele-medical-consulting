@@ -30,19 +30,6 @@
                             sans-serif;">
                             Patients
                     </a>
-                    <a href="${pageContext.request.contextPath}/nurse/queue.jsp"
-                        class="px-4 py-2 text-xs font-medium <%= isQueue ? " text-white"
-                        : "text-gray-600 hover:bg-gray-100" %> rounded transition-all"
-                        style="<%= isQueue ? "background-color: #DE6143;" : "" %> font-family: 'Poppins', sans-serif;">
-                            Queue
-                    </a>
-                    <a href="${pageContext.request.contextPath}/nurse/settings.jsp"
-                        class="px-4 py-2 text-xs font-medium <%= isSettings ? " text-white"
-                        : "text-gray-600 hover:bg-gray-100" %> rounded transition-all"
-                        style="<%= isSettings ? "background-color: #DE6143;" : "" %> font-family: 'Poppins',
-                            sans-serif;">
-                            Settings
-                    </a>
                 </nav>
 
                 <!-- Right: Notification Icon + Profile -->

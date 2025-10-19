@@ -164,7 +164,6 @@ public class PatientsServlet extends HttpServlet {
             // Get the file part from request
             Part filePart = request.getPart("profilePicture");
 
-            // If no file uploaded or empty, return null (OPTIONAL field)
             if (filePart == null || filePart.getSize() == 0) {
                 return null;
             }

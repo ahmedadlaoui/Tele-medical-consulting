@@ -79,8 +79,6 @@ public class VitalSignsMapper {
             if (notes != null && !notes.trim().isEmpty()) {
                 vitalSigns.setNotes(notes.trim());
             }
-
-            // Set the patient
             vitalSigns.setPatient(patient);
 
             // Debug: Print what was set

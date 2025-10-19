@@ -41,9 +41,9 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("userRole", user.getRole());
             session.setAttribute("userName", user.getFirstName() + " " + user.getLastName());
 
-            System.out.println("Redirecting to: /dashboard");
-
-            response.sendRedirect(request.getContextPath() + "/dashboard");
+            RoleRedirect roleRedirect = new RoleRedirect();
+            String url = roleRedirect.getRedirectUrl(user.getRole());
+            response.sendRedirect(request.getContextPath() + url);
         } else {
             System.out.println("Login failed for email: " + email);
 
